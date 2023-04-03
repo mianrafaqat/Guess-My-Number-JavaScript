@@ -1,50 +1,29 @@
 "use strict";
 
-let Secratenumber = Math.trunc(Math.random() * 20) + 1;
+const modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
+const closeBtn = document.querySelector(".close-modal");
+const showBtn = document.querySelectorAll(".show-modal");
 
-let score = 20;
-let highSccore = 0;
-
-const displayMessage = (message) => {
-  document.querySelector(".message").textContent = message;
+const closeModal = () => {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
 };
 
-document.querySelector(".check").addEventListener("click", function () {
-  const guess = Number(document.querySelector(".guess").value);
-  if (!guess) {
-    displayMessage("No number  ⛔");
-  } else if (guess === Secratenumber) {
-    displayMessage("Correct Number ✔");
-    document.querySelector("body").style.backgroundColor = "#60b347";
-    document.querySelector(".number").style.width = "30rem";
-    document.querySelector(".number").textContent = Secratenumber;
+const openModal = () => {
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
 
-    if (score > highSccore) {
-      highSccore = score;
-      document.querySelector(".highscore").textContent = highSccore;
-    }
-  } else if (guess !== Secratenumber) {
-    if (score > 1) {
-      guess > Secratenumber
-        ? displayMessage("Too high 🙌")
-        : displayMessage("Too Low 👇");
-      score--;
-      document.querySelector(".score").textContent = score;
-    } else {
-      displayMessage("You lost the game ☹");
-      document.querySelector(".score").textContent = 0;
-    }
+for (let i = 0; i < showBtn.length; i++) {
+  showBtn[i].addEventListener("click", openModal);
+}
+
+closeBtn.addEventListener("click", closeModal);
+overlay.addEventListener("click", closeModal);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeModal();
   }
-});
-
-document.querySelector(".again").addEventListener("click", () => {
-  score = 20;
-  Secratenumber = Math.trunc(Math.random() * 20) + 1;
-
-  document.querySelector(".message").textContent = "Start guessing...";
-  document.querySelector(".score").textContent = score;
-  document.querySelector(".number").textContent = "?";
-  document.querySelector(".guess").value = "";
-  document.querySelector("body").style.backgroundColor = "#222";
-  document.querySelector(".number").style.width = "15rem";
 });
